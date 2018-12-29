@@ -1,4 +1,7 @@
 const request = require('request');
+const mathAdd = require('./mathAdd.js');
+const mathMultiply = require('./mathMultiply.js')
+
 
 
 //Import Express Library
@@ -16,71 +19,17 @@ app.get('/',(request, response)=>{
     response.send(`<h2>MATH</h2><br><a href="http://localhost:3000/math/add">Addition</a> <p>${request.param}</p>`);
 });
 
-let jsonObj = {
-    input: {},
-    sumString: '',
-    sum: 0,
-    error: 0,
-}
-const getParams = function (url) {
-    let params = {};
-    let interroNum = url.indexOf('?');
-    const interro =   url.slice(interroNum+1);
-	const vars = interro.split('&');
-	for (let i = 0; i < vars.length; i++) {
-		const pair = vars[i].split('=');
-		params[pair[0]] = decodeURIComponent(pair[1]);
-	}
-    return params;
-};
 
 app.get('/math/add',(request, res)=>{
     res.contentType('.html');
     const url = request.url;
-    jsonObj['input'] = getParams(url);
-    jsonObj['sum'] = 0;
-    jsonObj['sumString']='';
-    for(values in jsonObj['input']){
-        if( !Number(jsonObj['input'][values])) {
-            res.send( {error: `You passed a non-number value into the parameters`});
-        }
-        jsonObj['sum']+= Number(jsonObj['input'][values]);
-        const length = Object.keys(jsonObj['input']).length;
-            if (length === 2 ){
-                jsonObj['sumString']=Object.values(jsonObj['input'])[0].concat('+').concat(Object.values(jsonObj['input'])[1]);
-            }
-            else if (length > 2){
-                for(let i = 1; i < length; i++)
-                jsonObj['sumString']=Object.values(jsonObj['input'])[0].padStart('+');
-            }
-          
-        
-    }
-    res.send( `${JSON.stringify(jsonObj)}`);
+    res.send(mathAdd.add(url));
 });
 
-/*app.get('/math/multiply',(request, res)=>{
+app.get('/math/multiply',(request, res)=>{
     res.contentType('.html');
-    const a = Number(request.query.a);
-    const b = Number(request.query.b);
-    const result = math.multiply(a,b);
-    res.send(`The answer is ${result}`);
-});
-
-app.get('/math/subtract',(request, res)=>{
-    res.contentType('.html');
-    const a = Number(request.query.a);
-    const b = Number(request.query.b);
-    const result = math.subtract(a,b);
-    res.send(`The answer is ${result}`);
-});
-
-app.get('/math/divide',(request, res)=>{
-    res.contentType('.html');
-    const a = Number(request.query.a);
-    const b = Number(request.query.b);
-    const result = math.divide(a,b);
-    res.send(`The answer is ${result}`);
+    const url = request.url;
+    res.send(mathMultiply.multiply(url));
 });
 
 
@@ -89,7 +38,7 @@ app.get('/proxy', (req, res) => {
     request('http://www.google.com', {encoding: null},function (error, response, body){
     res.send(body);
 });
-});*/
+});
 
 //Get your app serve to listen for requests
 app.listen(port, ()=>{
