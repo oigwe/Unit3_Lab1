@@ -28,7 +28,7 @@ app.get('/math/add',(request, response)=>{
     response.send(mathAdd.add(url));
 });
 
-app.get('/math/multiply',(request, res)=>{
+app.get('/math/multiply',(request, response)=>{
     response.contentType('.html');
     const url = request.url;
     response.send(mathMultiply.multiply(url));
@@ -38,17 +38,15 @@ app.get('/gif',(req, res)=>{
     const api_key = 'siIyo4w5mg0REENX76Sr57QTgkt3BWvY';
     const url = `https://api.giphy.com/v1/gifs/search?api_key=${api_key}&q=${req.query.search}`;
     request(url, (error, response, body) => {
-        console.log(body.data);
-        res.send(JSON.parse(body).data[0].images.original.url)
-        
+        let arr = [];
+        const toDisplay = JSON.parse(body).data;
+        for(let i=0;i<toDisplay.length; i++){
+           arr.push(toDisplay[i].images.original.url);
+        }
+        res.send(arr);
 });
 });
 
-app.get('/proxy', (req, res) => {
-    request('http://www.google.com', {encoding: null},function (error, response, body){
-    res.send(body);
-});
-});
 
 //Get your app serve to listen for requests
 app.listen(port, ()=>{
