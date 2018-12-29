@@ -18,18 +18,18 @@ math.multiply = (url) => {
     let jsonObj = {
         input: {},
         productString: '',
-        product: 0,
+        product: 1,
     };
 
     jsonObj['input'] = getParams(url);
-    jsonObj['sum'] = 0;
+    jsonObj['product'] = 1;
     jsonObj['productString']='';
     for(values in jsonObj['input']){
         if( !Number(jsonObj['input'][values])) {
             return {error: `You passed a non-number value into the parameters`};
         }
-        jsonObj['sum']*= Number(jsonObj['input'][values]);
-        jsonObj['sumString'] = Object.values(jsonObj['input']).join('*');           
+        jsonObj['product']*= Number(jsonObj['input'][values]);
+        jsonObj['productString'] = Object.values(jsonObj['input']).join('*');           
     }
     return `${JSON.stringify(jsonObj)}`;
 }

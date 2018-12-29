@@ -26,12 +26,14 @@ math.add = (url) => {
     jsonObj['sumString']='';
     for(values in jsonObj['input']){
         if( !Number(jsonObj['input'][values])) {
-            return console.log({error: `You passed a non-number value into the parameters`});
+            return {error: `You passed a non-number value into the parameters`};
         }
         jsonObj['sum']+= Number(jsonObj['input'][values]);
         jsonObj['sumString'] = Object.values(jsonObj['input']).join('+');           
     }
     return `${JSON.stringify(jsonObj)}`;
 }
+
+
 
 module.exports = math;

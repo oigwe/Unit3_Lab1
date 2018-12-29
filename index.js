@@ -1,6 +1,6 @@
-const request = require('request');
 const mathAdd = require('./mathAdd.js');
-const mathMultiply = require('./mathMultiply.js')
+const mathMultiply = require('./mathMultiply.js');
+const request = require('request');
 
 
 
@@ -16,23 +16,33 @@ const port = 3000;
 
 app.get('/',(request, response)=>{
     response.contentType('.html');
-    response.send(`<h2>MATH</h2><br><a href="http://localhost:3000/math/add">Addition</a> <p>${request.param}</p>`);
+    response.send(`<h2>MATH</h2><br><a href="http://localhost:3000/math/add">ADDITION</a><h4><b>Search Format:</b></h4><p>localhost:3000/math/add<b>/?[param1]=[num1]&[param2]&[num2]...</b></p>
+    <br><a href="http://localhost:3000/math/add">MULTIPLY</a><h4><b>Search Format:</b></h4><p>localhost:3000/math/multiply<b>?[param1]=[num1]&[param2]&[num2]...</b></p>
+    <h2>GIPHY SEARCH</h2><br><a href="http://localhost:3000/gif/search">GIF SEARCH</a><h4><b>Search Format:</b></h4><p>localhost:3000/gif/?<b>search=[parameter]</b></p>`);
 });
 
 
-app.get('/math/add',(request, res)=>{
-    res.contentType('.html');
+app.get('/math/add',(request, response)=>{
+    response.contentType('.html');
     const url = request.url;
-    res.send(mathAdd.add(url));
+    response.send(mathAdd.add(url));
 });
 
 app.get('/math/multiply',(request, res)=>{
-    res.contentType('.html');
+    response.contentType('.html');
     const url = request.url;
-    res.send(mathMultiply.multiply(url));
+    response.send(mathMultiply.multiply(url));
 });
 
-
+app.get('/gif',(req, res)=>{
+    const api_key = 'siIyo4w5mg0REENX76Sr57QTgkt3BWvY';
+    const url = `https://api.giphy.com/v1/gifs/search?api_key=${api_key}&q=${req.query.search}`;
+    request(url, (error, response, body) => {
+        console.log(body.data);
+        res.send(JSON.parse(body).data[0].images.original.url)
+        
+});
+});
 
 app.get('/proxy', (req, res) => {
     request('http://www.google.com', {encoding: null},function (error, response, body){
